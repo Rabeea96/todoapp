@@ -56,7 +56,7 @@ class MainController extends AbstractController
 
         // Redirect back to the todo-list + display error message (flash message)
         $this->addFlash(
-            'danger', 'The TODO is missing the description!'
+            'danger', 'The TODO description must be at least 3 characters long'
         );
         return $this->redirect($this->generateUrl('todos_list'));
     }

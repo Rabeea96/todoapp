@@ -37,7 +37,7 @@
                 {% for todo in todos %}
                     <tr>
                         <td>
-                            <input id="isCompletedCheckbox" class="form-check-input" type="checkbox" value="" {% if todo.isCompleted is same as(TRUE) %} checked {% endif %} >
+                            <input class="checkbox form-check-input" type="checkbox" data-todo-id="{{ todo.id }}" value="" {% if todo.isCompleted is same as(TRUE) %} checked {% endif %} >
                         </td>                    
                         <td> {{ todo.id }} </td>
                         <td> {{ todo.description }} </td>
@@ -46,7 +46,7 @@
                             <!-- Update form -->
                             <form method="post" action="/update/{{ todo.id }}" class="d-inline-block">
                                 <input type="hidden" name="id" value="{{ todo.id }}" />
-                                <input type="hidden" name="isCompleted" value="{{ todo.isCompleted }}" id="isCompletedHidden" />
+                                <input type="hidden" name="isCompleted" id="isCompleted_{{ todo.id }}" value="{{ todo.isCompleted }}" />
                                 <button type="submit" class="btn btn-success"><i class="bi bi-pencil"></i> Update</button>
                             </form>
 
@@ -63,14 +63,13 @@
 
         <script>        
             // When updating the checkbox - update the hidden field for the checkbox in the update form
-            const checkbox = document.getElementById('isCompletedCheckbox');
-            const hiddenField = document.getElementById('isCompletedHidden');            
-            checkbox.addEventListener('change', function() {
-                if (this.checked) {
-                    hiddenField.value = 1;
-                } else {
-                    hiddenField.value = 0;
-                }
+            document.querySelectorAll('.checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const todoId = this.dataset.todoId;
+                    const isChecked = this.checked;
+                    const hiddenInput = document.querySelector(`#isCompleted_${todoId}`);
+                    hiddenInput.value = isChecked ? '1' : '0';
+                });
             });
         </script>
     </div>
